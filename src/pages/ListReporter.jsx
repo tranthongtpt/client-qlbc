@@ -37,10 +37,20 @@ const ListReporter = () => {
 
   const getUser = async () =>{
       const token =localStorage.getItem('token');
+
+      const prams={
+        page:1,
+        size:10,
+        // typeUsers:7,
+        // instituteId: 1,
+        provinceId:10
+      }
       
-      var config = {
+      const config = {
         method: 'post',
-        url: 'http:10.220.5.65:8090/api/v1/admin/manager-user?page=1&size=2&typeUsers=7&instituteId=1',
+        baseURL: 'http://10.220.5.65:8090/api/v1/admin/manager-user',
+
+        params: prams,
         headers: { 
           'Authorization': 'Bearer '+token, 
         },
@@ -48,7 +58,7 @@ const ListReporter = () => {
       
       axios(config)
       .then(function (res) {
-          console.log(res.data.result.data);
+          console.log(res);
           setUsers(res.data.result.data)
       })
       .catch(function (error) {
@@ -82,7 +92,7 @@ const ListReporter = () => {
     
           <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
           <Header category="Page" title="Danh sách phóng viên thường trú" />
-          <TableContainer>
+            <TableContainer>
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableHead>
                         <TableRow>
@@ -111,19 +121,11 @@ const ListReporter = () => {
                             <TableCell align="left">{user.address}</TableCell>
                             <TableCell align="left">{user.phone}</TableCell>
                             <TableCell align="left">{user.TypeUser.name}</TableCell>
-                            <TableCell align="left">
-                                <IconButton >
-                                    <BiEdit style={{height:"25px",width:"25px"}} />
-                                </IconButton>
-                                <IconButton >
-                                    <MdDeleteOutline style={{height:"25px",width:"25px"}}/>
-                                </IconButton>
-                            </TableCell>
                             </TableRow>
                         ))}
                         </TableBody>
                     </Table>
-                </TableContainer>
+            </TableContainer>
           </div>
 
       </div>

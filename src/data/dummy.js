@@ -492,11 +492,6 @@ export const links = [
         icon: <BiEdit />,
       },
       {
-        path:'/employees',
-        name: "Đăng ký tài khoản",
-        icon: <FaUserEdit />,
-      },
-      {
         path:'/customers',
         name: "Quản lý người dùng",
         icon: <CgUserList />,
@@ -505,22 +500,57 @@ export const links = [
         path:'/customers',
         name: "Xem văn bản",
         icon: <TbFileSpreadsheet />,
-      }
-    ],
-  },
-  {
-    title: 'System',
-    links: [
-      {
-        path:'/listreporter',
-        name: 'Danh sách đơn vị báo chí',
-        icon: <HiOutlineClipboardList />,
       },
       {
         path:'/calendar',
         name: 'Lịch làm việc',
         icon: <AiOutlineCalendar />,
       },
+    ],
+  },
+  {
+    title: 'Register',
+    links: [
+      {
+        path:'/register',
+        name: "Đăng ký tài khoản",
+        icon: <FaUserEdit />,
+      },
+      {
+        path:'/registerunits',
+        name: "Đăng ký đơn vị",
+        icon: <FaUserEdit />,
+      }
+    ],
+  },
+  {
+    title: 'List',
+    links: [
+      {
+        path:'/listreporter',
+        name: 'Danh sách user',
+        icon: <HiOutlineClipboardList />,
+      },
+      {
+        path:'/listunits',
+        name: 'Danh sách đơn vị báo chí',
+        icon: <HiOutlineClipboardList />,
+      },
+      {
+        path:'/listresidentreporter',
+        name: 'Danh sách phóng viên thường trú',
+        icon: <HiOutlineClipboardList />,
+      },
+      {
+        path:'/listspokesman',
+        name: 'Danh sách người phát ngôn',
+        icon: <HiOutlineClipboardList />,
+      },
+    ],
+  },
+  {
+    title: 'System',
+    links: [
       {
         path: "/user",
         name: "Người dùng",

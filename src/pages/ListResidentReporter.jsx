@@ -28,8 +28,9 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Pagination from '@mui/material/Pagination';
 import {IconButton} from "@mui/material";
+import Avatar from '@mui/material/Avatar';
 
-const ListUnits = () => {
+const ListResidentReporter = () => {
   const editing = { allowDeleting: true, allowEditing: true };
   const { currentColor, currentMode,activeMenu } = useStateContext();
 // ---------------------
@@ -39,8 +40,8 @@ const ListUnits = () => {
       const token =localStorage.getItem('token');
       
       var config = {
-        method: 'post',
-        baseURL: 'http://10.220.5.65:8090/api/v1/admin/manager-institute?page=1&size=2&typeInstitute=2&provinceId=10',
+        method: 'get',
+        baseURL: 'http://10.220.5.65:8090/api/v1/user/data-journalist?proviceId=1&typeUsersId=4&page=1&size=10',
         headers: { 
           'Authorization': 'Bearer '+token, 
         },
@@ -87,11 +88,13 @@ const ListUnits = () => {
                         <TableHead>
                         <TableRow>
                             <TableCell>id</TableCell>
-                            <TableCell align="left">Avatar</TableCell>
-                            <TableCell align="left">Tên đơn vị</TableCell>
-                            <TableCell align="left">Mô tả</TableCell>
+                            <TableCell align="left">Hình đại diện</TableCell>
+                            <TableCell align="left">Họ và tên</TableCell>
+                            <TableCell align="left">Email</TableCell>
+                            <TableCell align="left">Đơn vị làm việc</TableCell>
                             <TableCell align="left">Địa chỉ</TableCell>
-                            <TableCell align="left">Note</TableCell>
+                            <TableCell align="left">Số điện thoại</TableCell>
+                            <TableCell align="left">Cơ quan nhà nước</TableCell>
                             <TableCell align="left"></TableCell>
                         </TableRow>
                         </TableHead>
@@ -104,11 +107,15 @@ const ListUnits = () => {
                             <TableCell component="th" scope="row">
                                 {user.id}
                             </TableCell>
-                            <TableCell align="left">{user.avatar}</TableCell>
-                            <TableCell align="left">{user.name}</TableCell>
-                            <TableCell align="left">{user.description}</TableCell>
+                            <TableCell align="left">
+                              <Avatar alt="avt" src={user.avatar}/>
+                            </TableCell>
+                            <TableCell align="left">{user.givenName}</TableCell>
+                            <TableCell align="left">{user.email}</TableCell>
+                            <TableCell align="left">{user.Institute.name}</TableCell>
                             <TableCell align="left">{user.address}</TableCell>
-                            <TableCell align="left">{user.note}</TableCell>
+                            <TableCell align="left">{user.phone}</TableCell>
+                            <TableCell align="left">{user.TypeUser.name}</TableCell>
                             </TableRow>
                         ))}
                         </TableBody>
@@ -120,4 +127,4 @@ const ListUnits = () => {
     </div>
   );
 };
-export default ListUnits;
+export default ListResidentReporter;

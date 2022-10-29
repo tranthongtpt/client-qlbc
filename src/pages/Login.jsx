@@ -28,13 +28,13 @@ import axios from 'axios';
             e.preventDefault();
 
             const data = JSON.stringify({
-            "email": values.email,
+            "usersName": values.usersName,
             "password": values.password
             });
 
             const config = {
             method: 'post',
-            url: 'http://10.220.5.65:8090/api/v1/province/login',
+            url: 'http://10.220.5.65:8090/api/v1/admin/login',
             headers: { 
                 'Content-Type': 'application/json',
             },
@@ -58,15 +58,15 @@ import axios from 'axios';
         }
         // ttttttttttttttttttttest
         const initialFValues={
-            email:'',
+            usersName:'',
             password:''
         }
         const validate = (fieldValues = values) => {
             let temp = { ...errors }
-            if ('email' in fieldValues)
-                temp.email = (/$^|.+@.+..+/).test(fieldValues.email) ? "" : "Email is not valid."
+            if ('usersName' in fieldValues)
+                temp.usersName = test(fieldValues.usersName) ? "" : "Email is not valid."
             if ('password' in fieldValues)
-                temp.password = fieldValues.password.length > 6 ? "" : "Minimum 10 numbers required."
+                temp.password = fieldValues.password.length > 1 ? "" : "Minimum 10 numbers required."
             setErrors({
                 ...temp
             })
@@ -100,11 +100,11 @@ import axios from 'axios';
                                 margin="normal"
                                 required
                                 fullWidth
-                                name="email"
-                                label="email"
-                                value={values.email}
+                                name="usersName"
+                                label="usersName"
+                                value={values.usersName}
                                 onChange={handleInputChange}
-                                error={errors.email}
+                                error={errors.usersName}
                                 /> 
                             </div>
                             <div className="my-2 mx-16">

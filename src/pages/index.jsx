@@ -1,7 +1,7 @@
 export { default as Ecommerce } from "./Ecommerce";
 export { default as Kanban } from "./Kanban";
 export { default as ListReporter } from "./ListReporter";
-export { default as Employees } from "./Employees";
+export { default as Register } from "./Register";
 export { default as Editor } from "./Editor";
 export { default as Customers } from "./Customers";
 export { default as ListUnits } from "./ListUnits";
@@ -18,3 +18,6 @@ export { default as Login } from "./Login";
 export { default as EnterMail } from "./EnterMail";
 export { default as EnterCode } from "./EnterCode";
 export { default as ForgotPassword } from "./ForgotPassword";
+export { default as ListResidentReporter } from "./ListResidentReporter";
+export { default as ListSpokesman } from "./ListSpokesman";
+export { default as RegisterUnits } from "./RegisterUnits";

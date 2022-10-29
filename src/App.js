@@ -6,7 +6,7 @@ import {
   Ecommerce,
   ListReporter,
   Calendar,
-  Employees,
+  Register,
   Stacked,
   Pyramid,
   Customers,
@@ -22,7 +22,10 @@ import {
   Login,
   EnterMail,
   EnterCode,
-  ForgotPassword
+  ForgotPassword,
+  ListSpokesman,
+  ListResidentReporter,
+  RegisterUnits
 } from "./pages";
 import "./App.css";
 import { getToken, removeUserSession, setUserSession } from './Utils/Common';
@@ -59,14 +62,19 @@ const App = () => {
           <Route element={<PrivateRouter/>}>
             <Route path="/bangdieukhien" element={<Ecommerce />} />
             {/* pages  */}
-            <Route path="/listreporter" element={<ListReporter />} />
-            <Route path="/employees" element={<Employees />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/registerunits" element={<RegisterUnits />} />
             <Route path="/customers" element={<Customers />} />
+            {/* List */}
+            <Route path="/listreporter" element={<ListReporter />} />
+            <Route path="/listunits" element={<ListUnits />} />
+            <Route path="/listspokesman" element={<ListSpokesman />} />
+            <Route path="/listresidentreporter" element={<ListResidentReporter />} />
             {/* apps  */}
             <Route path="/kanban" element={<Kanban />} />
             <Route path="/editor" element={<Editor />} />
             <Route path="/calendar" element={<Calendar />} />
-            <Route path="/list-units" element={<ListUnits />} />
+            
             {/* charts  */}
             <Route path="/line" element={<Line />} />
             <Route path="/area" element={<Area />} />
