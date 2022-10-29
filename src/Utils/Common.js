@@ -21,3 +21,10 @@ export const getUser = () => {
     localStorage.setItem('token', token);
     // localStorage.setItem('email', JSON.stringify(email));
   }
+  export function getAllEmployees() {
+    if (localStorage.getItem('token') == null)
+        localStorage.setItem('token', JSON.stringify([]))
+    let employees = JSON.parse(localStorage.getItem('token'));
+    //map departmentID to department title
+    
+}

@@ -1,12 +1,11 @@
 import React,{ useState,useEffect }  from 'react';
 import axios from 'axios';
-import { GridComponent, Inject, ColumnsDirective, ColumnDirective, Search, Page } from '@syncfusion/ej2-react-grids';
 
+import { GridComponent, Inject, ColumnsDirective, ColumnDirective, Search, Page } from '@syncfusion/ej2-react-grids';
 import { employeesData, employeesGrid } from '../data/dummy';
 import { Header } from '../components';
 import { useStateContext } from "../contexts/ContextProvider";
 import { Navbar, Sidebar} from "../components";
-
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -47,6 +46,7 @@ const onSubmit = (data) => {
     
     axios(config)
     .then(function (response) {
+      
       console.log(JSON.stringify(response.data));
     })
     .catch(function (error) {
@@ -77,7 +77,7 @@ const onSubmit = (data) => {
           </div>  
 
           <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
-            <Header category="Page" title="Dang ky tai khoan nguoi dung" />
+            <Header category="Trang" title="Đăng ký tài khoản người dùng" />
             <form onSubmit={handleSubmit(onSubmit)} className="w-full">
                     <div className="flex flex-wrap -mx-3 mb-6">
                         <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">

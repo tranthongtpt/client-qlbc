@@ -17,8 +17,9 @@ import {BiEdit} from 'react-icons/bi'
 import {MdDeleteOutline} from 'react-icons/md'
 import { useStateContext } from "../contexts/ContextProvider";
 import { ordersData, contextMenuItems, ordersGrid } from "../data/dummy";
-import { Header,Navbar,Sidebar} from "../components";
+import { Header,Navbar,Sidebar,useTable} from "../components";
 import axios from "axios";
+import * as Common from '../Utils/Common'
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -27,8 +28,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Pagination from '@mui/material/Pagination';
-import {IconButton} from "@mui/material";
-
+import {IconButton,InputAdornment} from "@mui/material";
+import TextField from '@mui/material/TextField';
+import {FcSearch} from 'react-icons/fc'
 const ListReporter = () => {
   const editing = { allowDeleting: true, allowEditing: true };
   const { currentColor, currentMode,activeMenu } = useStateContext();
@@ -68,6 +70,27 @@ const ListReporter = () => {
   useEffect(() =>{
       getUser();
   }, [])
+  // ----
+  const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
+
+  const {
+    TblContainer,
+    TblHead,
+    TblPagination,
+    recordsAfterPagingAndSorting
+} = useTable( filterFn);
+
+const handleSearch = e => {
+  let target = e.target;
+  setFilterFn({
+      fn: items => {
+          if (target.value == "")
+              return items;
+          else
+              return items.filter(x => x.fullName.toLowerCase().includes(target.value))
+      }
+  })
+}
   return (
     <div className="flex relative dark:bg-main-dark-bg">
         {activeMenu ? (
@@ -92,6 +115,16 @@ const ListReporter = () => {
     
           <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
           <Header category="Page" title="Danh sách phóng viên thường trú" />
+          <TextField 
+            label="Search Employees"
+            size="small"
+            InputProps={{
+                startAdornment: (<InputAdornment position="start">
+                    <FcSearch />
+                </InputAdornment>)
+            }}
+            onChange={handleSearch} 
+          />
             <TableContainer>
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableHead>
