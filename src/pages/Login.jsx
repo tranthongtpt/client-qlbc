@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import React,{ useState } from 'react';
 import Button from '@material-ui/core/Button';
 
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 import { useForm } from "../components/Form/useForm";
 import { TextField, InputAdornment, IconButton } from "@material-ui/core";
 import Visibility from "@material-ui/icons/Visibility";
@@ -14,6 +16,8 @@ import axios from 'axios';
         const [inputs, setInputs] = useState({});
         const navigate = useNavigate();
 
+        const MySwal = withReactContent(Swal)
+        
         const [showPassword, setShowPassword] = useState(false);
         const handleClickShowPassword = () => setShowPassword(!showPassword);
         const handleMouseDownPassword = () => setShowPassword(!showPassword);
@@ -44,10 +48,38 @@ import axios from 'axios';
             axios(config)
             .then(response => {
                 if(response.data.success === true || 'accessToken' in response) {
-                    localStorage.setItem('token',response.data.result.token);
-                        navigate('/bangdieukhien');
+                    MySwal.fire({
+                        toast: true,
+                        position: 'top-right',
+                        iconColor: 'white',
+                        customClass: {
+                          popup: 'colored-toast'
+                        },
+                        showConfirmButton: false,
+                        timer: 1500,
+                        timerProgressBar: true,
+                        icon: 'success',
+                        title: 'success',
+                        iconColor:"#40E0D0	"
+                        }).then(()=>{
+                            localStorage.setItem('token',response.data.result.token);
+                                navigate('/bangdieukhien');
+                        })
                     } else{
-                        
+                        MySwal.fire({
+                            toast: true,
+                            position: 'top-right',
+                            iconColor: 'white',
+                            customClass: {
+                              popup: 'colored-toast'
+                            },
+                            showConfirmButton: false,
+                            timer: 1500,
+                            timerProgressBar: true,
+                            icon: 'error',
+                            title: 'Error',
+                            iconColor:"#CD5C5C	"
+                            })
                     }
                 console.log(response.data);
             })

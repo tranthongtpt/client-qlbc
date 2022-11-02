@@ -8,6 +8,7 @@ import {
   ContextMenu,
   Filter,
   Page,
+  Toolbar,
   ExcelExport,
   PdfExport,
   Edit,
@@ -42,10 +43,8 @@ const ListReporter = () => {
 
       const prams={
         page:1,
-        size:10,
-        // typeUsers:7,
-        // instituteId: 1,
-        provinceId:10
+        size:100,
+        // provinceId:1
       }
       
       const config = {
@@ -70,27 +69,9 @@ const ListReporter = () => {
   useEffect(() =>{
       getUser();
   }, [])
-  // ----
-  const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
 
-  const {
-    TblContainer,
-    TblHead,
-    TblPagination,
-    recordsAfterPagingAndSorting
-} = useTable( filterFn);
-
-const handleSearch = e => {
-  let target = e.target;
-  setFilterFn({
-      fn: items => {
-          if (target.value == "")
-              return items;
-          else
-              return items.filter(x => x.fullName.toLowerCase().includes(target.value))
-      }
-  })
-}
+const toolbarOptions = ['Delete','Search'];
+const editSettings = { allowEditing: true, allowAdding: true, allowDeleting: true};
   return (
     <div className="flex relative dark:bg-main-dark-bg">
         {activeMenu ? (
@@ -114,53 +95,24 @@ const handleSearch = e => {
           </div>  
     
           <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
-          <Header category="Page" title="Danh sách phóng viên thường trú" />
-          <TextField 
-            label="Search Employees"
-            size="small"
-            InputProps={{
-                startAdornment: (<InputAdornment position="start">
-                    <FcSearch />
-                </InputAdornment>)
-            }}
-            onChange={handleSearch} 
-          />
-            <TableContainer>
-                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                        <TableHead>
-                        <TableRow>
-                            <TableCell>id</TableCell>
-                            <TableCell align="left">Họ và tên</TableCell>
-                            <TableCell align="left">Email</TableCell>
-                            <TableCell align="left">Đơn vị làm việc</TableCell>
-                            <TableCell align="left">Địa chỉ</TableCell>
-                            <TableCell align="left">Số điện thoại</TableCell>
-                            <TableCell align="left">Cơ quan nhà nước</TableCell>
-                            <TableCell align="left"></TableCell>
-                        </TableRow>
-                        </TableHead>
-                        <TableBody>
-                        {users.map((user) => (
-                            <TableRow
-                            key={user.id}
-                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                            >
-                            <TableCell component="th" scope="row">
-                                {user.id}
-                            </TableCell>
-                            <TableCell align="left">{user.givenName}</TableCell>
-                            <TableCell align="left">{user.email}</TableCell>
-                            <TableCell align="left">{user.Institute.name}</TableCell>
-                            <TableCell align="left">{user.address}</TableCell>
-                            <TableCell align="left">{user.phone}</TableCell>
-                            <TableCell align="left">{user.TypeUser.name}</TableCell>
-                            </TableRow>
-                        ))}
-                        </TableBody>
-                    </Table>
-            </TableContainer>
+          <Header category="Trang" title="Danh sách người dùng" />
+            <div className='control-pane'>
+              <div className='control-section row'>
+                  <GridComponent dataSource={users} toolbar={toolbarOptions} allowSorting={true} editSettings={editSettings} allowPaging={true} pageSettings={{ pageSize: 10, pageCount: 5 }} >
+                      <ColumnsDirective>
+                          <ColumnDirective field='id' headerText='id' width='70'></ColumnDirective>
+                          <ColumnDirective field='givenName' headerText='Họ và tên' width='140'></ColumnDirective>
+                          <ColumnDirective field='email' headerText='Email' width='180' textAlign='Left' />
+                          <ColumnDirective field='Institute.name' headerText='Đơn vị làm việc' width='250' textAlign='Left' />
+                          <ColumnDirective field='Province.name' headerText='Địa chỉ' width='100' textAlign='Left' />
+                          <ColumnDirective field='phone' headerText='Số điện thoại' width='100' textAlign='Left' />
+                          <ColumnDirective field='TypeUser.name' headerText='Cơ quan' width='150' textAlign='Left' />
+                      </ColumnsDirective>
+                      <Inject services={[Toolbar, Page, Edit,Filter, Page, Sort]} />
+                  </GridComponent>
+              </div>
           </div>
-
+        </div>
       </div>
     </div>
   );

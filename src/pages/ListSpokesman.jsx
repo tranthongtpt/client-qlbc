@@ -3,6 +3,7 @@ import {
   GridComponent,
   ColumnsDirective,
   ColumnDirective,
+  Toolbar,
   Resize,
   Sort,
   ContextMenu,
@@ -27,20 +28,23 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Pagination from '@mui/material/Pagination';
-import {IconButton} from "@mui/material";
-
+import {IconButton,InputAdornment} from "@mui/material";
+import TextField from '@mui/material/TextField';
+import {FcSearch} from 'react-icons/fc'
 const ListSpokesman = () => {
   const editing = { allowDeleting: true, allowEditing: true };
   const { currentColor, currentMode,activeMenu } = useStateContext();
 // ---------------------
   const [users, setUsers] = useState([]);
+  const toolbarOptions = ['Delete','Search'];
+  const editSettings = { allowEditing: true, allowAdding: true, allowDeleting: true};
 
   const getUser = async () =>{
       const token =localStorage.getItem('token');
       
       var config = {
         method: 'get',
-        baseURL: 'http://10.220.5.65:8090/api/v1/user/data-spokesman?proviceId=10&page=1&size=5',
+        baseURL: 'http://10.220.5.65:8090/api/v1/user/data-spokesman?proviceId=10&typeUsersId=4&page=1&size=20',
         headers: { 
           'Authorization': 'Bearer '+token, 
         },
@@ -81,40 +85,23 @@ const ListSpokesman = () => {
           </div>  
     
           <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
-          <Header category="Page" title="Danh sách phóng viên thường trú" />
-          <TableContainer>
-                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                        <TableHead>
-                        <TableRow>
-                            <TableCell>Id</TableCell>
-                            <TableCell align="left">Họ và tên</TableCell>
-                            <TableCell align="left">Email</TableCell>
-                            <TableCell align="left">Đơn vị làm việc</TableCell>
-                            <TableCell align="left">Địa chỉ</TableCell>
-                            <TableCell align="left">Số điện thoại</TableCell>
-                            <TableCell align="left">Cơ quan nhà nước</TableCell>
-                        </TableRow>
-                        </TableHead>
-                        <TableBody>
-                        {users.map((user) => (
-                            <TableRow
-                            key={user.id}
-                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                            >
-                            <TableCell component="th" scope="row">
-                                {user.id}
-                            </TableCell>
-                            <TableCell align="left">{user.givenName}</TableCell>
-                            <TableCell align="left">{user.email}</TableCell>
-                            <TableCell align="left">{user.Institute.name}</TableCell>
-                            <TableCell align="left">{user.Institute.address}</TableCell>
-                            <TableCell align="left">{user.phone}</TableCell>
-                            <TableCell align="left">{user.TypeUser.name}</TableCell>
-                            </TableRow>
-                        ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+            <Header category="Page" title="Danh sách người phát ngôn" />
+            <div className='control-pane'>
+              <div className='control-section row'>
+                  <GridComponent dataSource={users} toolbar={toolbarOptions} allowSorting={true} editSettings={editSettings} allowPaging={true} pageSettings={{ pageSize: 10, pageCount: 5 }} >
+                      <ColumnsDirective>
+                          <ColumnDirective field='id' headerText='id' width='70'></ColumnDirective>
+                          <ColumnDirective field='givenName' headerText='Họ và tên' width='140'></ColumnDirective>
+                          <ColumnDirective field='email' headerText='Email' width='250' textAlign='Left' />
+                          <ColumnDirective field='Institute.name' headerText='Đơn vị làm việc' width='250' textAlign='Left' />
+                          <ColumnDirective field='Institute.address' headerText='Địa chỉ' width='180' textAlign='Left' />
+                          <ColumnDirective field='phone' headerText='Số điện thoại' width='200' textAlign='Left' />
+                          <ColumnDirective field='TypeUser.name' headerText='Cơ quan nhà nước' width='150' textAlign='Left' />
+                      </ColumnsDirective>
+                      <Inject services={[Toolbar, Page,Filter, Page, Sort]} />
+                  </GridComponent>
+              </div>
+            </div>
           </div>
 
       </div>

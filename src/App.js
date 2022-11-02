@@ -29,6 +29,7 @@ import {
 } from "./pages";
 import "./App.css";
 import { getToken, removeUserSession, setUserSession } from './Utils/Common';
+import Home from "./pages/Newspaper/Home";
 
 const App = () => {
 
@@ -57,6 +58,7 @@ const App = () => {
             <Route path="/entermail" element={<EnterMail/>}/>
             <Route path="/entercode" element={<EnterCode/>}/>
             <Route path="/forgotpassword" element={<ForgotPassword/>}/>
+            <Route path="/home" element={<Home/>}/>
           </Route>
 
           <Route element={<PrivateRouter/>}>

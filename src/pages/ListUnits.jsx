@@ -3,6 +3,7 @@ import {
   GridComponent,
   ColumnsDirective,
   ColumnDirective,
+  Toolbar,
   Resize,
   Sort,
   ContextMenu,
@@ -20,27 +21,20 @@ import { ordersData, contextMenuItems, ordersGrid } from "../data/dummy";
 import { Header,Navbar,Sidebar} from "../components";
 import axios from "axios";
 
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Pagination from '@mui/material/Pagination';
-import {IconButton} from "@mui/material";
-
 const ListUnits = () => {
   const editing = { allowDeleting: true, allowEditing: true };
   const { currentColor, currentMode,activeMenu } = useStateContext();
 // ---------------------
   const [users, setUsers] = useState([]);
 
+  const toolbarOptions = ['Delete','Search'];
+  const editSettings = { allowEditing: true, allowAdding: true, allowDeleting: true};
   const getUser = async () =>{
       const token =localStorage.getItem('token');
       
       var config = {
         method: 'post',
-        baseURL: 'http://10.220.5.65:8090/api/v1/admin/manager-institute?page=1&size=2&typeInstitute=2&provinceId=10',
+        baseURL: 'http://10.220.5.65:8090/api/v1/admin/manager-institute',
         headers: { 
           'Authorization': 'Bearer '+token, 
         },
@@ -48,7 +42,7 @@ const ListUnits = () => {
       
       axios(config)
       .then(function (res) {
-          console.log(res);
+          // console.log(res);
           setUsers(res.data.result.data)
       })
       .catch(function (error) {
@@ -81,39 +75,21 @@ const ListUnits = () => {
           </div>  
     
           <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
-          <Header category="Page" title="Danh sách phóng viên thường trú" />
-          <TableContainer>
-                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                        <TableHead>
-                        <TableRow>
-                            <TableCell>id</TableCell>
-                            <TableCell align="left">Avatar</TableCell>
-                            <TableCell align="left">Tên đơn vị</TableCell>
-                            <TableCell align="left">Mô tả</TableCell>
-                            <TableCell align="left">Địa chỉ</TableCell>
-                            <TableCell align="left">Note</TableCell>
-                            <TableCell align="left"></TableCell>
-                        </TableRow>
-                        </TableHead>
-                        <TableBody>
-                        {users.map((user) => (
-                            <TableRow
-                            key={user.id}
-                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                            >
-                            <TableCell component="th" scope="row">
-                                {user.id}
-                            </TableCell>
-                            <TableCell align="left">{user.avatar}</TableCell>
-                            <TableCell align="left">{user.name}</TableCell>
-                            <TableCell align="left">{user.description}</TableCell>
-                            <TableCell align="left">{user.address}</TableCell>
-                            <TableCell align="left">{user.note}</TableCell>
-                            </TableRow>
-                        ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+          <Header category="Page" title="Danh sách đơn vị báo chí" />
+            <div className='control-pane'>
+              <div className='control-section row'>
+                  <GridComponent dataSource={users} toolbar={toolbarOptions} allowSorting={true} editSettings={editSettings} allowPaging={true} pageSettings={{ pageSize: 10, pageCount: 5 }} >
+                      <ColumnsDirective>
+                          <ColumnDirective field='id' headerText='id' width='70'></ColumnDirective>
+                          <ColumnDirective field='name' headerText='Tên đơn vị' width='140'></ColumnDirective>
+                          <ColumnDirective field='description' headerText='Mô tả' width='180' textAlign='Left' />
+                          <ColumnDirective field='address' headerText='Địa chỉ' width='180' textAlign='Left' />
+                          <ColumnDirective field='note' headerText='Note' width='250' textAlign='Left' />
+                      </ColumnsDirective>
+                      <Inject services={[Toolbar, Page,Filter, Page, Sort]} />
+                  </GridComponent>
+              </div>
+            </div>
           </div>
 
       </div>

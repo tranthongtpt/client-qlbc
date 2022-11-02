@@ -8,27 +8,16 @@ import {
   ContextMenu,
   Filter,
   Page,
+  Toolbar,
   ExcelExport,
   PdfExport,
   Edit,
   Inject,
 } from "@syncfusion/ej2-react-grids";
-import {BiEdit} from 'react-icons/bi'
-import {MdDeleteOutline} from 'react-icons/md'
 import { useStateContext } from "../contexts/ContextProvider";
-import { ordersData, contextMenuItems, ordersGrid } from "../data/dummy";
 import { Header,Navbar,Sidebar} from "../components";
 import axios from "axios";
-
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Pagination from '@mui/material/Pagination';
-import {IconButton} from "@mui/material";
-import Avatar from '@mui/material/Avatar';
+import  "./css/avt.css"
 
 const ListResidentReporter = () => {
   const editing = { allowDeleting: true, allowEditing: true };
@@ -36,6 +25,8 @@ const ListResidentReporter = () => {
 // ---------------------
   const [users, setUsers] = useState([]);
 
+  const toolbarOptions = ['Delete','Search'];
+  const editSettings = { allowEditing: true, allowAdding: true, allowDeleting: true};
   const getUser = async () =>{
       const token =localStorage.getItem('token');
       
@@ -59,6 +50,15 @@ const ListResidentReporter = () => {
   useEffect(() =>{
       getUser();
   }, [])
+  function empTemplate(props) {
+    return (<div>
+    <div className="empimg">
+      <span className="e-userimg">
+      </span>
+    </div>
+    <span id="Emptext">{props.avatar}</span>
+  </div>);
+}
   return (
     <div className="flex relative dark:bg-main-dark-bg">
         {activeMenu ? (
@@ -83,46 +83,24 @@ const ListResidentReporter = () => {
     
           <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
           <Header category="Page" title="Danh sách phóng viên thường trú" />
-          <TableContainer>
-                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                        <TableHead>
-                        <TableRow>
-                            <TableCell>id</TableCell>
-                            <TableCell align="left">Hình đại diện</TableCell>
-                            <TableCell align="left">Họ và tên</TableCell>
-                            <TableCell align="left">Email</TableCell>
-                            <TableCell align="left">Đơn vị làm việc</TableCell>
-                            <TableCell align="left">Địa chỉ</TableCell>
-                            <TableCell align="left">Số điện thoại</TableCell>
-                            <TableCell align="left">Cơ quan nhà nước</TableCell>
-                            <TableCell align="left"></TableCell>
-                        </TableRow>
-                        </TableHead>
-                        <TableBody>
-                        {users.map((user) => (
-                            <TableRow
-                            key={user.id}
-                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                            >
-                            <TableCell component="th" scope="row">
-                                {user.id}
-                            </TableCell>
-                            <TableCell align="left">
-                              <Avatar alt="avt" src={user.avatar}/>
-                            </TableCell>
-                            <TableCell align="left">{user.givenName}</TableCell>
-                            <TableCell align="left">{user.email}</TableCell>
-                            <TableCell align="left">{user.Institute.name}</TableCell>
-                            <TableCell align="left">{user.address}</TableCell>
-                            <TableCell align="left">{user.phone}</TableCell>
-                            <TableCell align="left">{user.TypeUser.name}</TableCell>
-                            </TableRow>
-                        ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+            <div className='control-pane'>
+              <div className='control-section row'>
+                  <GridComponent dataSource={users} toolbar={toolbarOptions} allowSorting={true} editSettings={editSettings} allowPaging={true} pageSettings={{ pageSize: 10, pageCount: 5 }} >
+                      <ColumnsDirective>
+                          <ColumnDirective field='id' headerText='id' width='70'></ColumnDirective>
+                          <ColumnDirective field='avatar' headerText='Hình đại diện' width='140' clipMode='EllipsisWithTooltip' template={empTemplate} className='e-avatar-circle'></ColumnDirective>
+                          <ColumnDirective field='givenName' headerText='Họ và tên' width='180' textAlign='Left' />
+                          <ColumnDirective field='email' headerText='Email' width='180' textAlign='Left' />
+                          <ColumnDirective field='Institute.name' headerText='Đơn vị làm việc' width='250' textAlign='Left' />
+                          <ColumnDirective field='Province.name' headerText='Địa chỉ' width='100' textAlign='Left' />
+                          <ColumnDirective field='phone' headerText='Số điện thoại' width='100' textAlign='Left' />
+                          <ColumnDirective field='TypeUser.name' headerText='Cơ quan' width='150' textAlign='Left' />
+                      </ColumnsDirective>
+                      <Inject services={[Toolbar, Page, Edit,Filter, Page, Sort]} />
+                  </GridComponent>
+              </div>
+            </div>
           </div>
-
       </div>
     </div>
   );
