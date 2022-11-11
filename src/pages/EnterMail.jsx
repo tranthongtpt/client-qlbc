@@ -1,67 +1,171 @@
 import Illustration from "../data/Illustration.png"
 import { useNavigate } from "react-router-dom";
 import { Link } from 'react-router-dom';
-import React,{ useState,useRef } from 'react';
-import Button from '@material-ui/core/Button';
+import React, { useState, useRef } from 'react';
 
-import {useForm} from "react-hook-form";
-import { TextField, InputAdornment, IconButton } from "@material-ui/core";
-import Visibility from "@material-ui/icons/Visibility";
-import VisibilityOff from "@material-ui/icons/VisibilityOff";
+
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+import { useForm } from "../components/Form/useForm";
+import { Typography,  Button, TextField } from "@mui/material";
 import axios from 'axios';
 
-    export default function EnterMail() {
-        const [inputs, setInputs] = useState({});
-        const { register, errors, handleSubmit, watch } = useForm({});
+export default function EnterMail() {
+    const MySwal = withReactContent(Swal)
+    const navigate = useNavigate();
 
-        const password = useRef({});
-        password.current = watch("password", "");
-        const onSubmit = async data => {
-          alert(JSON.stringify(data));
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        const data = JSON.stringify({
+            "usersName": values.usersName,
+            "password": values.password
+        });
+
+        const config = {
+            method: 'post',
+            url: 'http://10.220.5.65:8090/api/v1/admin/login',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            data: data
         };
 
-        return (
-            <section className="relative w-full h-screen flex bg-blue-200">
-                <div className="relative w-6/12 h-full">
-                    <img src={Illustration} className="absolute top-0 left-0 w-full h-full object-scale-down"/>
-                </div>
+        axios(config)
+            .then(response => {
+                if (response.data.success === true || 'accessToken' in response) {
+                    MySwal.fire({
+                        toast: true,
+                        position: 'top-right',
+                        iconColor: 'white',
+                        customClass: {
+                            popup: 'colored-toast'
+                        },
+                        showConfirmButton: false,
+                        timer: 1500,
+                        timerProgressBar: true,
+                        icon: 'success',
+                        title: 'success',
+                        iconColor: "#40E0D0	"
+                    }).then(() => {
+                        localStorage.setItem('token', response.data.result.token);
+                        navigate('/bangdieukhien');
+                    })
+                } else {
+                    MySwal.fire({
+                        toast: true,
+                        position: 'top-right',
+                        iconColor: 'white',
+                        customClass: {
+                            popup: 'colored-toast'
+                        },
+                        showConfirmButton: false,
+                        timer: 1500,
+                        timerProgressBar: true,
+                        icon: 'error',
+                        title: 'Error',
+                        iconColor: "#CD5C5C	"
+                    })
+                }
+                console.log(response.data);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
 
-                <div className="w-6/12 h-full justify-center items-center flex">
-                    <div className="rounded-lg bg-white h-[500px] w-[470px]">
-                        <div className="text-center my-2 mx-4">
-                            <h1 className="font-[600] font-medium text-3xl inline-block uppercase my-8 text-center text-[#3f51b5]">ứng dụng quản lý báo chí</h1>
-                        </div>
-                        <form onSubmit={e => e.preventDefault()}>
-                            <div className="my-20 mx-16">
-                                <TextField
+    }
+
+    const initialFValues = {
+        usersName: '',
+        password: ''
+    }
+    const validate = (fieldValues = values) => {
+        let temp = { ...errors }
+        if ('usersName' in fieldValues)
+            temp.usersName = test(fieldValues.usersName) ? "" : "Email is not valid."
+        if ('password' in fieldValues)
+            temp.password = fieldValues.password.length < 7 ? "" : "Minimum 6 numbers required."
+        setErrors({
+            ...temp
+        })
+
+        if (fieldValues == values)
+            return Object.values(temp).every(x => x == "")
+    }
+    const {
+        values,
+        setValues,
+        errors,
+        setErrors,
+        handleInputChange,
+        resetForm
+    } = useForm(initialFValues, true, validate);
+
+    return (
+        <section className="relative w-full h-screen flex bg-blue-200">
+            <div className="relative w-6/12 h-full">
+                <img src={Illustration} className="absolute top-0 left-0 w-full h-full object-scale-down" />
+            </div>
+
+            <div className="w-6/12 h-full justify-center items-center flex">
+                <div className="flex flex-col max-w-md p-6 rounded-md sm:p-10 dark:bg-gray-900 dark:text-gray-100 bg-white h-[500px] w-[470px] rounded-[12px] border-solid border-[1px] border-sky-200">
+                    <div className="mb-5 text-center">
+                        <h1 className="my-3 text-3xl font-bold up uppercase text-stone-600">ứng dụng quản lý báo chí</h1>
+                        <p className="text-sm subpixel-antialiased text-[#6738b3] font-bold">Hi, Welcome Back</p>
+                    </div>
+                    <div className="flex items-center pt-4 pb-4 space-x-1">
+                        <div className="flex-1 h-[.5px] sm:w-16 divide-y divide-slate-300 bg-gray-500"></div>
+                        <p className="px-3 text-sm dark:text-gray-400 border rounded-lg p-1">Đăng nhập</p>
+                        <div className="flex-1 h-[.5px] sm:w-16 divide-y divide-blue-200 bg-gray-500"></div>
+                    </div>
+                    <form onSubmit={handleSubmit} className=" ng-untouched ng-pristine ng-valid">
+                        <div className="space-y-10">
+                            <TextField
                                 variant="outlined"
                                 margin="normal"
-                                name="email"
-                                label="Nhập email để lấy code"
-                                ref={register({
-                                    required: "Bắt buộc nhập email.",
-                                    pattern: {
-                                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                                        message: "Invalid email address",
-                                      },
-                                })}
-                                /> 
-                                {errors.password && <p>{errors.email.message}</p>}
-                            </div>
-                            <div className="my-20 mx-16 text-center bg-indigo-500 rounded-lg">
-                            <Button
-                                type="submit"
+                                required
                                 fullWidth
+                                name="usersName"
+                                label="Nhập email để lấy code"
+                                value={values.usersName}
+                                onChange={handleInputChange}
+                                error={errors.usersName}
+                            />
+                        </div>
+                        <div className="space-y-10">
+                            <Button
+                                fullWidth
+                                size="large"
+                                type="submit"
                                 variant="contained"
-                                color="primary"
-                                >
+                                sx={{
+                                    marginTop:'30px',
+                                    backgroundColor: '#6738b3',
+                                    '&:hover': {
+                                        backgroundColor: '#6738b3',
+                                    },
+                                }}
+                            >
                                 Đăng nhập
                             </Button>
-                            </div> 
-                        </form>
-                    </div>
+                        </div>
+                        <div className="pt-10 text-center">
+                            <div className=" h-px divide-y divide-blue-200 bg-gray-500"></div>
+                            <div className="pt-5">
+                                <Typography
+                                    component={Link}
+                                    to="/login"
+                                    variant="subtitle1"
+                                    sx={{ textDecoration: 'none',textAlign:'center',fontWeight: '500'}}
+                                >
+                                        Quay lại trang login
+                                </Typography>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-            </section>
-        )      
-    }
+            </div>
+        </section>
+    )
+}
 

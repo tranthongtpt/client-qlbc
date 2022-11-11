@@ -2,8 +2,10 @@ import { Header,Footer,TrendingPage } from "../../components/Newspaper";
 
 function Home() {
     return ( 
-        <Header/>
-        
+        <>
+            <Header/>
+            <TrendingPage/>
+        </>
      );
 }
 

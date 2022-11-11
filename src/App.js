@@ -25,7 +25,8 @@ import {
   ForgotPassword,
   ListSpokesman,
   ListResidentReporter,
-  RegisterUnits
+  RegisterUnits,
+  Page_404
 } from "./pages";
 import "./App.css";
 import { getToken, removeUserSession, setUserSession } from './Utils/Common';
@@ -46,7 +47,7 @@ const App = () => {
   }, []);
  
   if (authLoading && getToken()) {
-    return <div className="content">Checking Authentication...</div>
+    return <div className="w-16 h-16 border-4 border-dashed rounded-full animate-spin dark:border-violet-400">Checking Authentication...</div>
   }
 
   return (
@@ -87,7 +88,7 @@ const App = () => {
             <Route path="/pyramid" element={<Pyramid />} />
             <Route path="/stacked" element={<Stacked />} />
           </Route>
-
+          <Route path="*" element={<Page_404/>} />
       </Routes>
   </BrowserRouter>
   );

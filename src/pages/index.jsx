@@ -21,3 +21,4 @@ export { default as ForgotPassword } from "./ForgotPassword";
 export { default as ListResidentReporter } from "./ListResidentReporter";
 export { default as ListSpokesman } from "./ListSpokesman";
 export { default as RegisterUnits } from "./RegisterUnits";
+export { default as Page_404 } from "./Page_404";

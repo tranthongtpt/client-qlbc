@@ -41,7 +41,17 @@ module.exports = {
       backgroundImage: {
         "hero-pattern": "url('https://i.ibb.co/MkvLDfb/Rectangle-4389.png')",
       },
-    },
+      keyframes: {
+        mymove:{
+            '33%':{top:'0px'},
+            '66%':{top:'20px'},
+            '100%':{top:'0px'}
+        },
+      },
+      animation: {
+        'mymove': 'mymove 2.5s infinite',
+      },
+    }
   },
   plugins: [],
 };

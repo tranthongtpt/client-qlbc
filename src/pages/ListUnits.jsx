@@ -14,12 +14,10 @@ import {
   Edit,
   Inject,
 } from "@syncfusion/ej2-react-grids";
-import {BiEdit} from 'react-icons/bi'
-import {MdDeleteOutline} from 'react-icons/md'
 import { useStateContext } from "../contexts/ContextProvider";
-import { ordersData, contextMenuItems, ordersGrid } from "../data/dummy";
 import { Header,Navbar,Sidebar} from "../components";
-import axios from "axios";
+
+import adminApi from '../api/adminApi'
 
 const ListUnits = () => {
   const editing = { allowDeleting: true, allowEditing: true };
@@ -27,33 +25,32 @@ const ListUnits = () => {
 // ---------------------
   const [users, setUsers] = useState([]);
 
-  const toolbarOptions = ['Delete','Search'];
+  const toolbarOptions = ['Search'];
   const editSettings = { allowEditing: true, allowAdding: true, allowDeleting: true};
-  const getUser = async () =>{
-      const token =localStorage.getItem('token');
-      
-      var config = {
-        method: 'post',
-        baseURL: 'http://10.220.5.65:8090/api/v1/admin/manager-institute',
-        headers: { 
-          'Authorization': 'Bearer '+token, 
-        },
-      };
-      
-      axios(config)
-      .then(function (res) {
-          // console.log(res);
-          setUsers(res.data.result.data)
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }
+  
+  const fetchData = async () => {
+    try {
+      const params ={page:1, size:1030}
+      const res = await adminApi.getListUnits(params)
+      console.log('Fetch products successfully: ', res);
+      if(res != null) {
+        setUsers(res.data.result.data);
+      }
+    } catch (error) {
+      let statusText = "get lỗi rồi ahihi "
+      try {
+        statusText = error.res.statusText;
+      } catch (e) {
+
+      }
+      console.log(error.toString() + ".\n" + statusText);
+    }
+};
   useEffect(() =>{
-      getUser();
+    fetchData();
   }, [])
   return (
-    <div className="flex relative dark:bg-main-dark-bg">
+    <div className="flex relative ">
         {activeMenu ? (
           <div className="w-72 fixed sidebar dark:bg-secondary-dark-bg ">
             <Sidebar />
@@ -66,11 +63,11 @@ const ListUnits = () => {
         <div
           className={
             activeMenu
-              ? "dark:bg-main-dark-bg  bg-[#e3f2fd] min-h-screen md:ml-72 w-full  "
-              : "bg-main-bg dark:bg-main-dark-bg  w-full min-h-screen flex-2 "
+              ? "  bg-[#e3f2fd] min-h-screen md:ml-72 w-full  "
+              : "bg-[#e3f2fd]  w-full min-h-screen flex-2 "
           }
         >
-          <div className="fixed md:static bg-white dark:bg-main-dark-bg navbar w-full ">
+          <div className="fixed md:static bg-white  navbar w-full ">
             <Navbar />
           </div>  
     
@@ -79,12 +76,9 @@ const ListUnits = () => {
             <div className='control-pane'>
               <div className='control-section row'>
                   <GridComponent dataSource={users} toolbar={toolbarOptions} allowSorting={true} editSettings={editSettings} allowPaging={true} pageSettings={{ pageSize: 10, pageCount: 5 }} >
-                      <ColumnsDirective>
-                          <ColumnDirective field='id' headerText='id' width='70'></ColumnDirective>
-                          <ColumnDirective field='name' headerText='Tên đơn vị' width='140'></ColumnDirective>
-                          <ColumnDirective field='description' headerText='Mô tả' width='180' textAlign='Left' />
-                          <ColumnDirective field='address' headerText='Địa chỉ' width='180' textAlign='Left' />
-                          <ColumnDirective field='note' headerText='Note' width='250' textAlign='Left' />
+                      <ColumnsDirective> 
+                          <ColumnDirective field='name' headerText='Tên đơn vị' width='250' textAlign='left'/>
+                          <ColumnDirective field='address' headerText='Địa chỉ' width='250' textAlign='left' />
                       </ColumnsDirective>
                       <Inject services={[Toolbar, Page,Filter, Page, Sort]} />
                   </GridComponent>

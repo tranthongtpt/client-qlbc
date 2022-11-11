@@ -474,7 +474,7 @@ export const employeesGrid = [
 // slide bar
 export const links = [
   {
-    title: 'Dashboard',
+    title: 'Trang chủ',
     links: [
       {
         path:'/bangdieukhien',
@@ -485,10 +485,10 @@ export const links = [
   },
 
   {
-    title: 'Page',
+    title: 'Trang',
     links: [
       {
-        path: "/orders",
+        path: "/financial",
         name: "Đăng làm việc",
         icon: <BiEdit />,
       },
@@ -510,22 +510,22 @@ export const links = [
     ],
   },
   {
-    title: 'Register',
+    title: 'Đăng ký',
     links: [
       {
         path:'/register',
-        name: "Đăng ký tài khoản",
+        name: "Tạo tài khoản",
         icon: <FaUserEdit />,
       },
       {
         path:'/registerunits',
-        name: "Đăng ký đơn vị",
+        name: "Tạo đơn vị",
         icon: <FaUserEdit />,
       }
     ],
   },
   {
-    title: 'List',
+    title: 'Danh sách',
     links: [
       {
         path:'/listreporter',
@@ -549,21 +549,7 @@ export const links = [
       },
     ],
   },
-  {
-    title: 'System',
-    links: [
-      {
-        path: "/user",
-        name: "Người dùng",
-        icon: <BiUserCircle />,
-      },
-      {
-        path: "/settings",
-        name: "Cài đặt",
-        icon: <BiCog />,
-      },
-    ],
-  },
+
   // {
   //   title: 'Charts',
   //   links: [
