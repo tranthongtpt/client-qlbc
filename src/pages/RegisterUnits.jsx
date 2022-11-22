@@ -20,34 +20,48 @@ const RegisterUnits = () => {
   const [imageUrl, setImageUrl] = useState(null);
   const [provinces, setProvinces] = useState([]);
   const [typeinstitute, setTypeInstitute] = useState([]);
+  const [inputValues, setInputValues] = useState({});
+  const [loading, setLoading] = useState(false)
+  const [selectvalue, setSelectValue] = useState('')
   // ------------------------------------------
   const MySwal = withReactContent(Swal)
-  const { control, register, handleSubmit, reset, formState: { errors } } = useForm({
-    defaultValues: {
-      provinceId: '',
-      name: '',
-      files: '',
-      description: '',
-      typeInstituteId: '',
-      address: ''
-    }
-  });
-
-  const onSubmit = (data) => {
+  // const { control, register, handleSubmit, reset, formState: { errors } } = useForm({
+  //   defaultValues: {
+  //     provinceId: '',
+  //     name: '',
+  //     files: '',
+  //     description: '',
+  //     typeInstituteId: '',
+  //     address: ''
+  //   }
+  // });
+  console.log(inputValues)
+  const onSubmit = (e) => {
+    e.preventDefault();
     const token = localStorage.getItem('token');
-    console.log(data);
+    console.log(inputValues);
+    const data = { ...inputValues }
+    const formData = new FormData();
+    formData.append("provinceId", data.provinceId)
+    formData.append("name", data.name)
+    formData.append("files", data.files)
+    formData.append("description", data.description)
+    formData.append("typeInstituteId", data.typeInstituteId)
+    formData.append("address", data.address)
+
     const config = {
       method: 'post',
       url: 'http://10.220.5.65:8090/api/v1/admin/register-institute',
       headers: {
         'Authorization': 'Bearer ' + token,
       },
-      data: data
+      data: formData
     };
 
     axios(config)
       .then(function (response) {
         if (response.data?.success === true) {
+          console.log(data)
           MySwal.fire({
             toast: true,
             position: 'top-right',
@@ -91,7 +105,12 @@ const RegisterUnits = () => {
       const res = await adminApi.getInf();
       console.log('Fetch products successfully: ', res);
       if (res != null) {
-        setProvinces(res.data.result.province)
+        const provincesaaa = res.data.result.province.map((item) => {
+          return (
+            item
+          )
+        })
+        setProvinces(provincesaaa)
         setTypeInstitute(res.data.result.typeInstitute)
       }
     } catch (error) {
@@ -104,31 +123,30 @@ const RegisterUnits = () => {
       console.log(error.toString() + ".\n" + statusText);
     }
   };
-
-
+  const handleOnChange = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    setInputValues((prev) => ({ ...prev, [name]: value }));
+  };
+  const handleChange = (event) => {
+    setSelectValue(event.target.value);
+  };
   useEffect(() => {
     if (selectedImage) {
       setImageUrl(URL.createObjectURL(selectedImage));
     }
   }, [selectedImage]);
+  // console.log(selectedImage);
   useEffect(() => {
-    reset();
+    // reset();
     fetchData();
   }, [])
 
   // ----- dropdown treee
-  let ddTree;
+  var ddTree;
   const fields = { dataSource: provinces, value: 'id', text: 'name', child: 'children' };
-  const onChange =() =>{
-      let value = document.getElementById('value');
-      let text = document.getElementById('text');
-      // update the text and value property values in property panel based on selected item in Dropdown Tree
-      value.innerHTML = ddTree.value && ddTree.value.length > 0 ? ddTree.value[0] : '';
-      text.innerHTML = ddTree.text;
-  }
-  // call the change event's function after initialized the component.
-  const rendereComplete=() =>{
-      onChange();
+  const handleOnChangeDropdownTree = (args, e) => {
+    setInputValues((prev) => ({ ...prev, provinceId: ddTree.value && ddTree.value.length > 0 ? ddTree.value[0] : '' }));
   }
 
   return (
@@ -154,107 +172,100 @@ const RegisterUnits = () => {
         </div>
 
         <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
-          <Header category="Trang" title="Tạo tài khoản đơn vị" />
-          <form onSubmit={handleSubmit(onSubmit)} className="w-full">
+          <Header category="Trang" title="Cấp tài khoản đơn vị" />
+          <form onSubmit={onSubmit} className="w-full">
 
             <div className="flex flex-wrap -mx-3 mb-6">
-              <div className="w-full md:w-1/2 px-3">
-                <InputLabel htmlFor="my-input">Chọn tỉnh/huyện/xã</InputLabel>
-                    <div className="pt-4 my-0 mx-auto h-[50px]">
-                      <DropDownTreeComponent 
-                      ref={(dropdowntree) => { ddTree = dropdowntree; }} 
-                      fields={fields} change={onChange.bind(this)} 
-                      changeOnBlur={false} placeholder="Chọn trường thích hợp" 
-                      popupHeight="300px" 
-                      style={{fontSize:'16px',height:'45px'}}
-                      name='provinceId'
-                      />
-                  </div>
-                {/* <FormControl sx={{ width: 1, mt: 2, mb: 2 }}>
-                  <Controller
-                    render={({ field }) => (
-                      <Select {...field}>
-                        {provinces.map((province) => (
-                          <MenuItem value={province.id} key={province.id}>
-                            {province.name}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    )}
-                    name="provinceId"
-                    control={control}
-                  />
 
-                </FormControl> */}
+              <div className="w-full px-3 mb-3">
+                <InputLabel htmlFor="my-input">Chọn tỉnh/huyện/xã</InputLabel>
+                <div className="my-0 mx-auto h-[50px] bg-slate-50">
+                  <DropDownTreeComponent
+                    // name='provinceId'
+                    ref={(dropdowntree) => { ddTree = dropdowntree; }}
+                    fields={fields}
+                    allowFiltering={true}
+                    change={handleOnChangeDropdownTree}
+                    changeOnBlur={false} placeholder="Chọn trường thích hợp"
+                    filterBarPlaceholder='Search'
+                    popupHeight="400px"
+                    style={{ fontSize: '16px', height: '45px' }}
+                  />
+                </div>
               </div>
-              <div className="w-full md:w-1/2 px-3">
+              <div className="w-full px-3 mb-3">
                 <InputLabel htmlFor="my-input">Tên</InputLabel>
                 <TextField
+                  sx={{mt:1}}
                   className="appearance-none block w-full text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                   type="text"
                   variant="outlined"
                   margin="normal"
                   name='name'
-                  {...register("name", { required: "Bắt buộc nhập." })}
-                  error={Boolean(errors.name)}
-                  helperText={errors.name?.message}
+                  onChange={handleOnChange}
+                // {...register("name", { required: "Bắt buộc nhập." })}
+                // error={Boolean(errors.name)}
+                // helperText={errors.name?.message}
                 />
               </div>
-              <div className="w-full md:w-1/2 px-3">
+              <div className="w-full px-3 mb-3">
                 <InputLabel htmlFor="my-input">Mô tả</InputLabel>
                 <TextField
+                  sx={{mt:1}}
                   className="appearance-none block w-full text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                   type="text"
                   variant="outlined"
                   margin="normal"
                   name='description'
-                  {...register("description", { required: "trường này bắt buộc nhập" })}
-                  error={Boolean(errors.description)}
-                  helperText={errors.description?.message}
+                  onChange={handleOnChange}
+                // error={Boolean(errors.description)}
+                // helperText={errors.description?.message}
                 />
               </div>
-              <div className="w-full md:w-1/2 px-3">
+              <div className="w-full px-3 mb-3">
                 <InputLabel htmlFor="my-input">Địa chỉ</InputLabel>
                 <TextField
+                sx={{mt:1}}
                   className="appearance-none block w-full text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                   type="text"
                   variant="outlined"
                   margin="normal"
                   name='address'
-                  {...register("address", { required: "trường này bắt buộc nhập" })}
-                  error={Boolean(errors.address)}
-                  helperText={errors.address?.message}
+                  onChange={handleOnChange}
+                // error={Boolean(errors.address)}
+                // helperText={errors.address?.message}
                 />
               </div>
-              <div className="w-full md:w-1/2 px-3">
+              <div className='w-full px-3 mb-3 '>
                 <InputLabel htmlFor="my-input">Đơn vị</InputLabel>
-                <FormControl sx={{ width: 1, mt: 2, mb: 2 }}>
-                  <Controller
-                    render={({ field }) => (
-                      <Select {...field}>
-                        {typeinstitute.map((institute) => (
-                          <MenuItem value={institute.id} key={institute.id}>
-                            {institute.name}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    )}
-                    name='typeInstituteId'
-                    control={control}
-                  />
-                </FormControl>
+                <select
+                  name='typeInstituteId'
+                  onChange={handleOnChange}
+                  className=" border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full px-[14px] py-[16.5px] mt-1"
+                >
+                  {typeinstitute.map((institute, index) => (
+                    <option value={institute.id} key={index}>
+                      {institute.name}
+                    </option>
+                  ))}
+                </select>
               </div>
 
-              <div className="w-full md:w-1/2 px-3 pt-10">
+              <div className="w-full px-3 mb-3 pt-10">
                 <input
                   accept="image/*"
                   type="file"
                   id="select-image"
                   style={{ display: 'none' }}
-                  {...register("image")}
-                  onChange={(e) => setSelectedImage(e.target.files[0])}
+
+                  // onChange={(e) => setSelectedImage(e.target.files[0])}
                   className="mt-10"
-                  name=''
+                  name='files'
+                  onChange={(e) => {
+                    setInputValues((prev) => ({ ...prev, files: e.target.files[0] }));
+                    setSelectedImage(e.target.files[0])
+                  }
+                  }
                 />
                 <label htmlFor="select-image">
                   <Button variant="contained" component="span">
@@ -274,7 +285,7 @@ const RegisterUnits = () => {
                 type="reset"
                 variant="contained"
                 className="w-64"
-                onClick={reset}
+
                 sx={{
                   mr: 1,
                   backgroundColor: '#6738b3',
@@ -308,4 +319,3 @@ const RegisterUnits = () => {
   );
 };
 export default RegisterUnits;
-

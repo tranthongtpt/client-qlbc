@@ -31,7 +31,7 @@ const ListUnits = () => {
   const fetchData = async () => {
     try {
       const params ={page:1, size:1030}
-      const res = await adminApi.getListUnits(params)
+      const res = await adminApi.getListUnitsCQNN(params)
       console.log('Fetch products successfully: ', res);
       if(res != null) {
         setUsers(res.data.result.data);
@@ -78,6 +78,7 @@ const ListUnits = () => {
                   <GridComponent dataSource={users} toolbar={toolbarOptions} allowSorting={true} editSettings={editSettings} allowPaging={true} pageSettings={{ pageSize: 10, pageCount: 5 }} >
                       <ColumnsDirective> 
                           <ColumnDirective field='name' headerText='Tên đơn vị' width='250' textAlign='left'/>
+                          <ColumnDirective field='description' headerText='Mô tả' width='250' textAlign='left' />
                           <ColumnDirective field='address' headerText='Địa chỉ' width='250' textAlign='left' />
                       </ColumnsDirective>
                       <Inject services={[Toolbar, Page,Filter, Page, Sort]} />

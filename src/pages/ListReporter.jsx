@@ -3,6 +3,7 @@ import {
   GridComponent,
   ColumnsDirective,
   ColumnDirective,
+  CommandColumn,
   Resize,
   Sort,
   ContextMenu,
@@ -14,6 +15,9 @@ import {
   Edit,
   Inject,
 } from "@syncfusion/ej2-react-grids";
+import {AiTwotoneEdit,AiFillDelete} from 'react-icons/ai'
+import {MdSystemUpdateAlt,MdOutlineCancelPresentation} from 'react-icons/md'
+
 import { useStateContext } from "../contexts/ContextProvider";
 import { Header, Navbar, Sidebar, useTable } from "../components";
 
@@ -24,7 +28,7 @@ import adminApi from '../api/adminApi'
 const ListReporter = () => {
   const { activeMenu } = useStateContext();
   const toolbarOptions = ['Search'];
-  const editSettings = { allowEditing: true, allowAdding: true, allowDeleting: true };
+  // const editSettings = { allowEditing: true, allowAdding: true, allowDeleting: true };
   // ---------------------
   const [users, setUsers] = useState([]);
 
@@ -59,7 +63,12 @@ const ListReporter = () => {
       </div>
     )
   }
-
+  const editSettings = { allowEditing: true, allowAdding: true, allowDeleting: true, allowEditOnDblClick: false };
+  const validationRule = { required: true };
+  const commands = [{ type: 'Edit', buttonOption: <AiTwotoneEdit/> },
+      { type: 'Delete', buttonOption: <AiFillDelete/> },
+      { type: 'Save', buttonOption: <MdSystemUpdateAlt/> },
+      { type: 'Cancel', buttonOption:<MdOutlineCancelPresentation/>}];
   return (
     <div className="flex relative ">
       {activeMenu ? (
@@ -87,21 +96,24 @@ const ListReporter = () => {
           <div className='control-pane'>
             <div className='control-section row'>
               <GridComponent
+                id='gridcomp'
                 dataSource={users}
-                toolbar={toolbarOptions}
                 allowSorting={true}
                 editSettings={editSettings}
                 allowPaging={true}
                 pageSettings={{ pageSize: 20, pageCount: 5 }} >
                 <ColumnsDirective>
-                  <ColumnDirective field='givenName' headerText='Họ và tên' width='140'></ColumnDirective>
-                  <ColumnDirective field='email' headerText='Email' width='180' textAlign='Left' />
-                  <ColumnDirective field='Institute.name' headerText='Đơn vị làm việc' width='200' textAlign='Left' />
-                  <ColumnDirective field='Province.name' headerText='Địa chỉ' width='200' textAlign='Left' />
-                  <ColumnDirective field='phone' headerText='Số điện thoại' width='150' textAlign='Left' />
-                  <ColumnDirective field='TypeUser.name' headerText='Cơ quan' width='150' textAlign='Left' />
-                  <ColumnDirective field='actived' headerText='Trạng thái' width='250' textAlign='center' template={statusdetails} /></ColumnsDirective>
-                <Inject services={[Toolbar, Page, Edit, Filter, Page, Sort]} />
+                  {/* <ColumnDirective field='id' headerText='id' width='50' isPrimaryKey={true} validationRules={validationRule}/> */}
+                  <ColumnDirective field='givenName' headerText='Họ và tên' width='140' validationRules={validationRule}/>
+                  <ColumnDirective field='email' headerText='Email' width='180' textAlign='Left' validationRules={validationRule}/>
+                  <ColumnDirective field='Institute.name' headerText='Đơn vị làm việc' width='200' textAlign='Left' validationRules={validationRule}/>
+                  <ColumnDirective field='Province.name' headerText='Địa chỉ' width='200' textAlign='Left' validationRules={validationRule}/>
+                  <ColumnDirective field='phone' headerText='Số điện thoại' width='150' textAlign='Left' editType='number'/>
+                  <ColumnDirective field='TypeUser.name' headerText='Cơ quan' width='150' textAlign='Left' validationRules={validationRule}/>
+                  <ColumnDirective field='actived' headerText='Trạng thái' width='200' textAlign='center' template={statusdetails} />
+                  <ColumnDirective headerText='Manage Records' width='160' commands={commands}/>
+                </ColumnsDirective>
+                <Inject services={[ CommandColumn, Edit, Page, Sort]} />
               </GridComponent>
             </div>
           </div>

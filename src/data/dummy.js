@@ -514,12 +514,12 @@ export const links = [
     links: [
       {
         path:'/register',
-        name: "Tạo tài khoản",
+        name: "Cấp tài khoản",
         icon: <FaUserEdit />,
       },
       {
         path:'/registerunits',
-        name: "Tạo đơn vị",
+        name: "Cấp đơn vị",
         icon: <FaUserEdit />,
       }
     ],
@@ -535,6 +535,12 @@ export const links = [
       {
         path:'/listunits',
         name: 'Danh sách đơn vị báo chí',
+        icon: <HiOutlineClipboardList />,
+      },
+      ,
+      {
+        path:'/listunitscqnn',
+        name: 'Danh sách đơn vị cơ quan nhà nước',
         icon: <HiOutlineClipboardList />,
       },
       {
@@ -881,7 +887,7 @@ export const themeColors = [
 export const userProfileData = [
   {
     icon: <BsCurrencyDollar />,
-    title: 'My Profile',
+    title: 'Chỉnh sửa thông tin',
     desc: 'Account Settings',
     iconColor: '#03C9D7',
     iconBg: '#E5FAFB',

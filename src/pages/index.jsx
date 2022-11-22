@@ -5,6 +5,7 @@ export { default as Register } from "./Register";
 export { default as Editor } from "./Editor";
 export { default as Customers } from "./Customers";
 export { default as ListUnits } from "./ListUnits";
+export { default as ListUnitsCqnn } from "./ListUnitsCqnn";
 export { default as Calendar } from "./Calendar";
 export { default as Area } from "./Charts/Area";
 export { default as Bar } from "./Charts/Bar";

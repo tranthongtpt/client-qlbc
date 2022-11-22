@@ -20,9 +20,13 @@ const userApi = {
         const url = '/user/data-journalist';
         return await axiosClient.get(url,{params})
     },
-    getListUnits: async (params) =>{
+    getListUnitsCQNN: async (params) =>{
         const url = `/admin/manager-institute?page=${params?.page}&size=${params?.size}`;
         return await axiosClient.post(url,{params})
+    },
+    getListUnitsNPN: async () =>{
+        const url = '/pub/data-unit';
+        return await axiosClient.get(url)
     }
 }
 

@@ -109,7 +109,7 @@ const Navbar = () => {
         />
         <TooltipComponent content="Profile" position="BottomCenter">
           <div
-            className="flex items-center gap-2 cursor-pointer p-1 hover:bg-light-gray rounded-lg"
+            className="flex items-center gap-2 cursor-pointer p-1 hover:bg-light-gray rounded-lg h-[42px]"
             onClick={() => handleClick("userProfile")}
           >
             {/* <img
@@ -119,9 +119,9 @@ const Navbar = () => {
             /> */}
             <p>
               <span className="text-gray-400 text-14">Hi,</span>{" "}
-              {/* <span className="text-gray-400 font-bold ml-1 text-14">
-                {data.givenName}
-              </span> */}
+              <span className="text-gray-400 font-bold ml-1 text-14">
+                Admin
+              </span>
             </p>
             <MdKeyboardArrowDown className="text-gray-400 text-14" />
           </div>

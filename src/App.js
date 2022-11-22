@@ -17,6 +17,7 @@ import {
   Pie,
   Financial,
   ListUnits,
+  ListUnitsCqnn,
   ColorMapping,
   Editor,
   Login,
@@ -59,7 +60,6 @@ const App = () => {
             <Route path="/entermail" element={<EnterMail/>}/>
             <Route path="/entercode" element={<EnterCode/>}/>
             <Route path="/forgotpassword" element={<ForgotPassword/>}/>
-            <Route path="/home" element={<Home/>}/>
           </Route>
 
           <Route element={<PrivateRouter/>}>
@@ -71,6 +71,7 @@ const App = () => {
             {/* List */}
             <Route path="/listreporter" element={<ListReporter />} />
             <Route path="/listunits" element={<ListUnits />} />
+            <Route path="/listunitscqnn" element={<ListUnitsCqnn />} />
             <Route path="/listspokesman" element={<ListSpokesman />} />
             <Route path="/listresidentreporter" element={<ListResidentReporter />} />
             {/* apps  */}
@@ -88,6 +89,7 @@ const App = () => {
             <Route path="/pyramid" element={<Pyramid />} />
             <Route path="/stacked" element={<Stacked />} />
           </Route>
+          <Route path="/home" element={<Home/>}/>
           <Route path="*" element={<Page_404/>} />
       </Routes>
   </BrowserRouter>

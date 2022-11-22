@@ -140,7 +140,7 @@ console.log(provinces);
         </div>
 
         <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
-          <Header category="Trang" title="Tạo tài khoản người dùng" />
+          <Header category="Trang" title="Cấp tài khoản người dùng" />
           <form onSubmit={handleSubmit(onSubmit)} className="w-full">
             <div className="flex flex-wrap -mx-3 mb-6">
               <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
@@ -174,9 +174,9 @@ console.log(provinces);
                 <FormControl sx={{ width: 1, mt: 2, mb: 2 }}>
                   <Controller
                     render={({ field }) => (
-                      <Select {...field} id="my-input">
-                        {typeusers.map((user) => (
-                          <MenuItem value={user.id} key={user.id}>
+                      <Select {...field}>
+                        {typeusers.map((user,index) => (
+                          <MenuItem value={user.id} key={index}>
                             {user.name}
                           </MenuItem>
                         ))}
@@ -219,7 +219,7 @@ console.log(provinces);
                           ))}
                         </Select>
                       )}
-                      name="tinhId"
+                      name="provinceId"
                       control={control}
                     />
                   </FormControl>
@@ -239,7 +239,7 @@ console.log(provinces);
                           })}
                         </Select>
                       )}
-                      name="districtId"
+                      name="provinceId"
                       control={control}
                     />
                   </FormControl>

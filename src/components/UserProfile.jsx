@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { MdOutlineCancel } from "react-icons/md";
 
 import { Button } from ".";
@@ -8,16 +8,17 @@ import avatar from "../data/avatar.jpg";
 import { useNavigate } from "react-router-dom";
 
 const UserProfile = () => {
-  const { currentColor } = useStateContext();
-
+  const [isLoggedin, setIsLoggedin] = useState(false);
   const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    navigate("/login")
-}
+    setIsLoggedin(false)
+    navigate('/login');
+  }
+
   return (
-    <div className="nav-item absolute right-1 top-16 bg-white dark:bg-[#42464D] p-8 rounded-lg w-96">
+    <div className="nav-item absolute right-1 top-16 bg-white p-8 rounded-lg w-96 shadow-xl">
       <div className="flex justify-between items-center">
         <p className="font-semibold text-lg dark:text-gray-200">Thông tin người dùng</p>
         <Button
@@ -49,6 +50,7 @@ const UserProfile = () => {
           </p>
         </div>
       </div>
+
       <div>
         {userProfileData.map((item, index) => (
           <div
@@ -76,15 +78,15 @@ const UserProfile = () => {
       <div className="mt-5">
         <Button
           color="white"
-          bgColor={currentColor}
           text="Logout"
+          bgColor='#6738b3'
           borderRadius="10px"
           width="full"
           onClick={handleLogout}
         />
       </div>
     </div>
-  );
+  )
 };
 
 export default UserProfile;
